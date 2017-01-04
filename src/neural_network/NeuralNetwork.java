@@ -103,8 +103,7 @@ public class NeuralNetwork {
                 // accumulate error if needed
                 if ((algVer == B && isLastSample(sampleIndex))
                         || (algVer == MBB && batchFull(sampleIndex))) {
-                    addErrorAccumulation();
-                    resetErrorAccumulation();
+                    addAccumulatedError();
                 }
             }
             // mean square error
@@ -126,20 +125,11 @@ public class NeuralNetwork {
         return (sampleIndex + 1) % batchSize == 0;
     }
 
-    private void addErrorAccumulation() {
+    private void addAccumulatedError() {
         for (int k = 0; k < layers.length - 1; k++) {
             for (Neuron n : layers[k]) {
                 for (int j = 0; j < n.e.length; j++) {
                     n.w[j] += n.e[j];
-                }
-            }
-        }
-    }
-
-    private void resetErrorAccumulation() {
-        for (int k = 0; k < layers.length - 1; k++) {
-            for (Neuron n : layers[k]) {
-                for (int j = 0; j < n.e.length; j++) {
                     n.e[j] = 0;
                 }
             }
